@@ -14,9 +14,9 @@ class KalmanFilter(object):
 
         self.Q  # プロセスノイズの分散共分散行列
         self.R  # 観測ノイズの分散共分散行列
-        
+
         self.K  # カルマンゲイン
         self.P  # 推定誤差分散共分散行列
 
-    def predict(self, observerd_data, n):
+    def update(self, observerd_data, n):
         pass
