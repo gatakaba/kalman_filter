@@ -30,7 +30,6 @@ class KalmanFilter(object):
         Q, R = self.Q, self.R
         m = np.copy(self.m)
         P = np.copy(self.P)
-
         # prediction step
         m = F @ m
         P = F @ P @ F.T + Q
@@ -39,7 +38,7 @@ class KalmanFilter(object):
         K = P @ H.T @ np.linalg.inv(S)
         m = m + K @ (x - H @ m)
         P = P - K @ S @ K.T
-
+        # update parameter
         self.m = m
         self.P = P
         return self
