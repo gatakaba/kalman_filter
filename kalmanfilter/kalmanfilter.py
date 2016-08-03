@@ -128,6 +128,15 @@ class KalmanFilter(object):
         return m, P
 
     def predict_observation(self, k):
-        # p(x_{t+k}|x_{1:k})
-        # estimate observation after k step
+        """ estimate observation after k step
+
+        Parameters
+        ----------
+        k : int
+            Number of prediction step.
+        Returns
+        -------
+        m, P : ndarrays
+            The estimated value.
+        """
         pass
