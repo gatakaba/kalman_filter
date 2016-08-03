@@ -17,6 +17,26 @@ class KalmanFilter(object):
         self.m = None  # 状態推定値
         self.P = None  # 推定誤差分散共分散行列
 
+    @property
+    def get_state(self):
+        return self.m, self.P
+
+    @property
+    def transition_matrix(self):
+        return self.F
+
+    @property
+    def observation_matrix(self):
+        return self.H
+
+    @property
+    def process_covariance_matrix(self):
+        return self.Q
+
+    @property
+    def observation_covariance_matrix(self):
+        return self.R
+
     def update(self, observerd_data):
         """
         観測されたデータに応じて、状態と推定共分散行列を更新する
@@ -29,18 +49,21 @@ class KalmanFilter(object):
         Q, R = self.Q, self.R
         m = np.copy(self.m)
         P = np.copy(self.P)
+
         # prediction step
         m = F @ m
         P = F @ P @ F.T + Q
+
         # update step
         S = H @ P @ H.T + R
         K = P @ H.T @ np.linalg.inv(S)
         m = m + K @ (x - H @ m)
         P = P - K @ S @ K.T
+
         # update parameter
         self.m = m
         self.P = P
-        return self.m, self.P
+        return self
 
 
 if __name__ == "__main__":
@@ -91,13 +114,14 @@ if __name__ == "__main__":
     var_list = []
 
     for y in trajectory:
-        m, P = kf.update(y)
+        kf.update(y)
+        m, P = kf.get_state
         state_list.append(np.copy(m))
         var_list.append(np.copy(P[0, 0]))
 
     X = np.array(state_list)
     v = np.array(var_list)
-    
+
     plt.scatter(X[:, 0], X[:, 1], s=v ** 0.5 * 10, alpha=0.25)
 
     plt.plot(trajectory[:, 0], trajectory[:, 1], "bo", label="observerd")
