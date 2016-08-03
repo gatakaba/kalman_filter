@@ -46,7 +46,8 @@ for y in trajectory:
 
 for i in range(10):
     # print(kf.predict_state(i)[0])
-    print(kf.predict_state(i)[1])
+    # print(kf.predict_state(i)[1])
+    print(kf.predict_observation(i))
 
 """
 X = np.array(state_list)

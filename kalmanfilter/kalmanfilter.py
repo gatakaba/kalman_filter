@@ -130,13 +130,24 @@ class KalmanFilter(object):
     def predict_observation(self, k):
         """ estimate observation after k step
 
+        p(x_{t+k}|x_{1:k})
+
         Parameters
         ----------
         k : int
             Number of prediction step.
         Returns
         -------
-        m, P : ndarrays
+        predicted_x, predicted_R : ndarrays
             The estimated value.
         """
-        pass
+        m = np.copy(self.m)
+        P = np.copy(self.P)
+        F, H, Q, R = self.F, self.H, self.Q, self.R
+        for i in range(k):
+            m = F @ m
+            P = F @ P @ F.T + self.Q
+
+        predicted_x = H @ m
+        predicted_R = R + H @ P @ H.T
+        return predicted_x, predicted_R
