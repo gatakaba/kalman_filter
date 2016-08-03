@@ -85,8 +85,7 @@ class KalmanFilter(object):
         """
 
         x = observerd_data
-        F, H = self.F, self.H
-        Q, R = self.Q, self.R
+        F, H, Q, R = self.F, self.H, self.Q, self.R
         m = np.copy(self.m)
         P = np.copy(self.P)
 
