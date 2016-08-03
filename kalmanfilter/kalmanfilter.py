@@ -25,10 +25,10 @@ class KalmanFilter(object):
     observation_matrix : ndarray, shape = (observation_dim, state_dim)
 
     process_noise : ndarray, shape = (state_dim, state_dim)
-        also known as process_covariance_matrix
+        also known as process_covariance_matrix.
 
     observation_noise : ndarray, shape = (observation_dim, ovservation_dim)
-        also known as observation_covariance_matrix
+        also known as observation_covariance_matrix.
     """
 
     def __init__(self, transition_matrix, observation_matrix, process_noise, observation_noise):
@@ -105,8 +105,19 @@ class KalmanFilter(object):
         return self
 
     def predict_state(self, k):
-        # p(z_{t+k}|x_{1:k})
-        # estimate state after k step
+        """ estimate state after k step
+
+        p(z_{t+k}|x_{1:k})
+
+        Parameters
+        ----------
+        k : int
+            Number of prediction step.
+        Returns
+        -------
+        m, P : ndarrays
+            The estimated value.
+        """
 
         m = np.copy(self.m)
         P = np.copy(self.P)

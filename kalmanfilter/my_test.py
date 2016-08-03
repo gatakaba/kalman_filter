@@ -44,6 +44,11 @@ for y in trajectory:
     state_list.append(np.copy(m))
     var_list.append(np.copy(P[0, 0]))
 
+for i in range(10):
+    # print(kf.predict_state(i)[0])
+    print(kf.predict_state(i)[1])
+
+"""
 X = np.array(state_list)
 v = np.array(var_list)
 
@@ -54,3 +59,4 @@ plt.plot(X[:, 0], X[:, 1], "r-", linewidth=5, label="estimated")
 plt.legend()
 
 plt.show()
+"""
