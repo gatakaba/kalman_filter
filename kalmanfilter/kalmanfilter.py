@@ -6,8 +6,6 @@ import numpy as np
 
 class KalmanFilter(object):
     def __init__(self, dim_x, dim_z):
-        """dim is the number of dimension"""
-
         self.z  # 状態
         self.F  # 遷移行列
         self.H  # 観測行列
@@ -23,8 +21,9 @@ class KalmanFilter(object):
         """
         観測されたデータに応じて、状態と推定共分散行列を更新する
         :param observerd_data (1d ndarray): 観測値
-        :return: self
+        :return: 状態の確率密度関数の平均値
         """
+
         x = observerd_data
         F, H = self.F, self.H
         Q, R = self.Q, self.R
@@ -41,4 +40,6 @@ class KalmanFilter(object):
         # update parameter
         self.m = m
         self.P = P
-        return self
+        return self.m
+
+
