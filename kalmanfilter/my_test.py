@@ -1,6 +1,7 @@
 # coding:utf-8
 import numpy as np
 import matplotlib.pyplot as plt
+from kalmanfilter import KalmanFilter
 
 dt = 10 ** -1
 sigma1 = 0.5
@@ -39,7 +40,7 @@ var_list = []
 
 for y in trajectory:
     kf.update(y)
-    m, P = kf.get_state
+    m, P = kf.current_state
     state_list.append(np.copy(m))
     var_list.append(np.copy(P[0, 0]))
 
