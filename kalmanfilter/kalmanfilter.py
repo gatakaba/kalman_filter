@@ -108,6 +108,7 @@ class KalmanFilter(object):
     def predict_state(self, k):
         # p(z_{t+k}|x_{1:k})
         # estimate state after k step
+        #
         pass
 
     def predict_observation(self, k):
