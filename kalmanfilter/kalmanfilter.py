@@ -1,5 +1,17 @@
 # coding:utf-8
+"""
 # カルマンフィルタの実装
+
+## モデル
+    状態方程式
+        * p(z_{n+1}|z_{n}) = N(z_{n+1}|F z_{n},\gamma)= N(z_{n+1}|n_{n},\gamma)
+    観測方程式
+        * p(x_{n}|z_{n}) = N(x_{n}|C z_{n},\sigma) = N(x_{n}|z_{n},\sigma)
+## 機能
+    * 状態推定(フィルタリング)
+    * 状態予測
+    * 観測値の予測
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
