@@ -1,6 +1,7 @@
-kalman filter implemented with in python
+# kalman filter implemented with in python
 
-## やりたいこと
+## todo
+
 * filtering/smoothing/prediction
 * パラメータ推定
     * EMアルゴリズムによるバッチ学習
