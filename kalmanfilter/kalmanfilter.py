@@ -51,8 +51,9 @@ class KalmanFilter(object):
 
     def update(self, observerd_data):
         """
+        p(z_{t}|x_{1:t})
         観測されたデータに応じて、状態と推定共分散行列を更新する
-        :param observerd_data (1d ndarray): 観測値
+        :param 観測値 (1d ndarray)
         :return: 状態の確率密度関数の平均値と分散
         """
 
@@ -76,6 +77,17 @@ class KalmanFilter(object):
         self.m = m
         self.P = P
         return self
+
+    def predict_state(self, k):
+        # p(z_{t+k}|x_{1:k})
+        # estimate state after k step
+        pass
+
+    def predict_observation(self, k):
+        # p(x_{t+k}|x_{1:k})
+        # estimate observation after k step
+
+        pass
 
 
 if __name__ == "__main__":
