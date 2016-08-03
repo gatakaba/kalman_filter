@@ -12,8 +12,6 @@
     * 状態予測
     * 観測値の予測
 """
-
-import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -25,11 +23,10 @@ class KalmanFilter(object):
         self.Q = process_noise  # プロセスノイズの分散共分散行列
         self.R = observation_noise  # 観測ノイズの分散共分散行列
 
-        self.K = None  # カルマンゲイン
-
         self.m = np.random.normal(size=4)  # 状態推定値
-        # self.P = np.random.normal(size=[4, 4])
         self.P = np.eye(4)  # 推定誤差分散共分散行列
+
+        self.K = None  # カルマンゲイン
 
     @property
     def get_state(self):
