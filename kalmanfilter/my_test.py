@@ -44,10 +44,11 @@ for y in trajectory:
     state_list.append(np.copy(m))
     var_list.append(np.copy(P[0, 0]))
 
-for i in range(10):
-    # print(kf.predict_state(i)[0])
-    # print(kf.predict_state(i)[1])
-    print(kf.predict_observation(i))
+print()
+plt.plot(kf.predict_state(10)[0])
+plt.show()
+# print(kf.predict_state(i)[1])
+# print(kf.predict_observation(i))
 
 """
 X = np.array(state_list)

@@ -104,8 +104,8 @@ class KalmanFilter(object):
         self.P = P
         return self
 
-    def predict_state(self, k):
-        """ estimate state after k step
+    def predict_state(self, k, spot_estimation=False):
+        """ estimate state between k step from current.
 
         p(z_{t+k}|x_{1:k})
 
@@ -113,6 +113,8 @@ class KalmanFilter(object):
         ----------
         k : int
             Number of prediction step.
+        spot_estimation : bool
+            If True, return only after k step estimate value
         Returns
         -------
         m, P : ndarrays
@@ -122,13 +124,23 @@ class KalmanFilter(object):
         m = np.copy(self.m)
         P = np.copy(self.P)
         F, H, Q, R = self.F, self.H, self.Q, self.R
+
+        estimated_mean_list = []
+        estimated_covariance_list = []
         for i in range(k):
             m = F @ m
-            P = F @ P @ F.T + self.Q
-        return m, P
+            P = F @ P @ F.T + Q
 
-    def predict_observation(self, k):
-        """ estimate observation after k step
+            estimated_mean_list.append(np.copy(m))
+            estimated_covariance_list.append(np.copy(P))
+
+        if spot_estimation:
+            return estimated_mean_list[-1], estimated_covariance_list[-1]
+        else:
+            return estimated_mean_list, estimated_covariance_list
+
+    def predict_observation(self, k, spot_estimation=False):
+        """ estimate observation between k step from current.
 
         p(x_{t+k}|x_{1:k})
 
@@ -136,18 +148,31 @@ class KalmanFilter(object):
         ----------
         k : int
             Number of prediction step.
+        spot_estimation : bool
+            If True, return only after k step estimate value
         Returns
         -------
         predicted_x, predicted_R : ndarrays
             The estimated value.
         """
-        m = np.copy(self.m)
-        P = np.copy(self.P)
-        F, H, Q, R = self.F, self.H, self.Q, self.R
-        for i in range(k):
-            m = F @ m
-            P = F @ P @ F.T + self.Q
 
-        predicted_x = H @ m
-        predicted_R = R + H @ P @ H.T
-        return predicted_x, predicted_R
+        F, H, Q, R = self.F, self.H, self.Q, self.R
+        estimated_state_data = self.predict_state(k)
+
+        estimated_mean_list = []
+        estimated_covariance_list = []
+
+        for i in range(k):
+            m = estimated_state_data[0][i]
+            P = estimated_state_data[1][i]
+
+            predicted_x = H @ m
+            predicted_R = H @ P @ H.T + R
+
+            estimated_mean_list.append(predicted_x)
+            estimated_covariance_list.append(predicted_R)
+
+        if spot_estimation:
+            return estimated_mean_list[-1], estimated_covariance_list[-1]
+        else:
+            return estimated_mean_list, estimated_covariance_list
