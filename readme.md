@@ -1,4 +1,4 @@
-# kalman filter implemented with in python
+# kalman filter implemented in python
 
 ## todo
 
