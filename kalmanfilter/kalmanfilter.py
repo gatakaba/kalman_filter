@@ -82,6 +82,11 @@ class KalmanFilter(object):
         Parameters
         ----------
         observerd_data : ndarray ,shape = (observation_dim)
+
+        Returns
+        -------
+        self : object
+            Returns the instance itself.
         """
 
         x = observerd_data
@@ -115,6 +120,7 @@ class KalmanFilter(object):
             Number of prediction step.
         spot_estimation : bool
             If True, return only after k step estimate value
+
         Returns
         -------
         m, P : ndarrays
@@ -150,6 +156,7 @@ class KalmanFilter(object):
             Number of prediction step.
         spot_estimation : bool
             If True, return only after k step estimate value
+
         Returns
         -------
         predicted_x, predicted_R : ndarrays
