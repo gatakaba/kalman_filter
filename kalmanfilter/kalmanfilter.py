@@ -92,7 +92,20 @@ class KalmanFilter(object):
     def observation_noise(self):
         return self.R
 
-    def _log_likelihood(self):
+    def _log_likelihood(self, observed_datas):
+        """ calc log likelihood
+
+
+        Parameters
+        ----------
+        observed_datas : ndarray, shape = (*, observation_dim)
+
+        Returns
+        -------
+        l : float
+            Returns log likelihood
+        """
+        
         return None
 
     def update(self, observerd_data):
