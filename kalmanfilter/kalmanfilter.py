@@ -52,6 +52,9 @@ class KalmanFilter(object):
         self.M = self.F.shape[0]  # 状態量の次元数
         self.N = self.H.shape[0]  # 観測値の次元数
 
+        self.inital_mean = initial_mean
+        self.inital_covariance = initial_covariance
+
         # 推定誤差分散共分散行列
         if not initial_covariance is None:
             self.P = initial_covariance
@@ -95,6 +98,7 @@ class KalmanFilter(object):
     def _log_likelihood(self, observed_datas):
         """ calc log likelihood
 
+        l(\theta) = ln p(X,Z|\theta) = ln p(z_{0}|\mu_{0},P_{0})+ \sum_{n=2}^{N} ln p(z_{n}|z_{n-1},F,Q)+ \sum_{n=1}^{N} ln p(x_{n}|z_{n},H,R)
 
         Parameters
         ----------
@@ -105,7 +109,28 @@ class KalmanFilter(object):
         l : float
             Returns log likelihood
         """
-        
+        # stateの初期化
+        # 推定誤差分散共分散行列
+        if not self.initial_covariance is None:
+            self.P = self.initial_covariance
+        else:
+            self.P = np.eye(self.M) * 10 ** 4
+
+        # 状態量の条件付き期待値
+        if not self.initial_mean is None:
+            self.m = self.initial_mean
+        else:
+            self.m = np.random.multivariate_normal(np.zeros(self.M), self.P)
+
+        state_list = []
+        log_likelihood = -(self.m * np.log(2 * np.pi)
+                           + np.log(np.linalg.det(self.P))
+                           + (self.m - 0) @ np.linalg.inv(self.P) @ (self.m - 0)) / 2
+
+        for x in observed_datas:
+            self.update(x)
+            state_list.append(np.copy(self.m))
+
         return None
 
     def update(self, observerd_data):
