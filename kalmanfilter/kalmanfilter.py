@@ -93,7 +93,9 @@ class KalmanFilter(object):
         return self.R
 
     def update(self, observerd_data):
-        """ update state
+        """ update state.
+
+        p(z_{k}|x_{1:k})
 
         推定した状態量を取得したい場合、current_stateにアクセスして下さい (← bad comment)
 
