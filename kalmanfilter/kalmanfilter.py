@@ -92,6 +92,9 @@ class KalmanFilter(object):
     def observation_noise(self):
         return self.R
 
+    def _log_likelihood(self):
+        return None
+
     def update(self, observerd_data):
         """ update state.
 
