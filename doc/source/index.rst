@@ -4,9 +4,11 @@ kalmanfilter
 Contents:
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
-   docs/about_kalman
+    docs/about_kalman
+    docs/estimate_parameter
+
 
 Indices and tables
 ==================
