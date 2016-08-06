@@ -1,11 +1,12 @@
-kalmanfilter_document memo
-=================================================
+kalmanfilter
+==============
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   docs/about_kalman
 
 Indices and tables
 ==================
