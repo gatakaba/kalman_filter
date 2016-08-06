@@ -31,17 +31,17 @@ E-stepにおける隠れ変数の分布はカルマンスムーザーの方法�
 
 * :math:`p(\mathbf{Z}|\mathbf{X},\theta^{old})`
 
-  * :math:`J_{n} = V_{n} A^{T} (P_{n})^{-1}`
+* :math:`J_{n} = V_{n} A^{T} (P_{n})^{-1}`
 
-  * :math:`\hat{\mu}_{n} = \mu_{n} + J_{n}(\hat{\mu}_{n+1} - A \mu_{n})`
+* :math:`\hat{\mu}_{n} = \mu_{n} + J_{n}(\hat{\mu}_{n+1} - A \mu_{n})`
 
-  * :math:`\hat{V}_{n} = V_{n} + J_{n}(\hat{V}_{n+1} -P_{n})J_{n}^{T}`
+* :math:`\hat{V}_{n} = V_{n} + J_{n}(\hat{V}_{n+1} -P_{n})J_{n}^{T}`
 
-  * :math:`E[z_{n}] = \hat{\mu_{n}}`
+* :math:`E[z_{n}] = \hat{\mu_{n}}`
 
-  * :math:`E[z_{n} z_{n-1}^{T}] = \hat{V}_{n} J_{n-1}^{T} + \hat{\mu}_{n} \hat{\mu}_{n-1}^{T}`
+* :math:`E[z_{n} z_{n-1}^{T}] = \hat{V}_{n} J_{n-1}^{T} + \hat{\mu}_{n} \hat{\mu}_{n-1}^{T}`
 
-  * :math:`E[z_{n} z_{n}^{T}] = \hat{V}_{n} + \hat{\mu}_{n} \hat{\mu}_{n}^{T}`
+* :math:`E[z_{n} z_{n}^{T}] = \hat{V}_{n} + \hat{\mu}_{n} \hat{\mu}_{n}^{T}`
 
 
 M-step

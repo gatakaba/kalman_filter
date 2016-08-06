@@ -63,15 +63,13 @@
 <h2>E-step<a class="headerlink" href="#e-step" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>E-stepにおける隠れ変数の分布はカルマンスムーザーの方法を用いる</p>
 <ul class="simple">
-<li><span class="math">\(p(\mathbf{Z}|\mathbf{X},\theta^{old})\)</span><ul>
+<li><span class="math">\(p(\mathbf{Z}|\mathbf{X},\theta^{old})\)</span></li>
 <li><span class="math">\(J_{n} = V_{n} A^{T} (P_{n})^{-1}\)</span></li>
 <li><span class="math">\(\hat{\mu}_{n} = \mu_{n} + J_{n}(\hat{\mu}_{n+1} - A \mu_{n})\)</span></li>
 <li><span class="math">\(\hat{V}_{n} = V_{n} + J_{n}(\hat{V}_{n+1} -P_{n})J_{n}^{T}\)</span></li>
 <li><span class="math">\(E[z_{n}] = \hat{\mu_{n}}\)</span></li>
 <li><span class="math">\(E[z_{n} z_{n-1}^{T}] = \hat{V}_{n} J_{n-1}^{T} + \hat{\mu}_{n} \hat{\mu}_{n-1}^{T}\)</span></li>
 <li><span class="math">\(E[z_{n} z_{n}^{T}] = \hat{V}_{n} + \hat{\mu}_{n} \hat{\mu}_{n}^{T}\)</span></li>
-</ul>
-</li>
 </ul>
 </div>
 <div class="section" id="m-step">
