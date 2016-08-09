@@ -8,6 +8,7 @@ Contents:
 
     docs/about_kalman
     docs/estimate_parameter
+    
 
 Indices and tables
 ==================

@@ -1,0 +1,22 @@
+kalmanfilter package
+====================
+
+Submodules
+----------
+
+kalmanfilter.kalmanfilter module
+--------------------------------
+
+.. automodule:: kalmanfilter.kalmanfilter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: kalmanfilter
+    :members:
+    :undoc-members:
+    :show-inheritance:
