@@ -53,18 +53,6 @@
 カルマンフィルタは線形・雑音がガウスノイズという性質を持ち、そのため一般の状態空間モデルと比較して少ない計算量
 であるという性質を持ちます。</p>
 </div>
-<div class="section" id="lqg">
-<h2>LQGの仮定<a class="headerlink" href="#lqg" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>カルマンフィルタは以下のLQG条件を有する状態空間モデルです。
-これらの条件により効率的に状態を推定する事ができます。</p>
-<ol class="arabic simple">
-<li>システム方程式及び観測方程式の線形性 (Linear)</li>
-<li>システムの雑音及び観測雑音の白色性 (white)</li>
-<li>雑音分布のガウス正規性 (Gaussian)</li>
-<li>２乗誤差規範</li>
-</ol>
-<p>カルマンフィルタはLQG仮定の元、事後推定誤差分散を最小化することを目的としている</p>
-</div>
 <div class="section" id="id3">
 <h2>線形確率システム<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>システム方程式</p>
@@ -78,23 +66,107 @@
 </div>
 </div>
 <div class="section" id="id4">
-<h2>状態の推定<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>パラメータ集<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<table border="1" class="docutils" id="id12">
+<caption><span class="caption-text">Parameter List</span><a class="headerlink" href="#id12" title="このテーブルへのパーマリンク">¶</a></caption>
+<colgroup>
+<col width="43%" />
+<col width="14%" />
+<col width="43%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">名称</th>
+<th class="head">記号</th>
+<th class="head">サイズ</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>内部状態</td>
+<td>z</td>
+<td>N</td>
+</tr>
+<tr class="row-odd"><td>観測値</td>
+<td>x</td>
+<td>M</td>
+</tr>
+<tr class="row-even"><td>入力値</td>
+<td>u</td>
+<td>L</td>
+</tr>
+<tr class="row-odd"><td>遷移行列</td>
+<td>A</td>
+<td>N ✕ N</td>
+</tr>
+<tr class="row-even"><td>駆動行列</td>
+<td>B</td>
+<td>N ✕ L</td>
+</tr>
+<tr class="row-odd"><td>観測行列</td>
+<td>C</td>
+<td>M ✕ N</td>
+</tr>
+<tr class="row-even"><td>観測誤差</td>
+<td>e</td>
+<td>N</td>
+</tr>
+<tr class="row-odd"><td>システムノイズ</td>
+<td>w</td>
+<td>N</td>
+</tr>
+<tr class="row-even"><td>観測ノイズ</td>
+<td>v</td>
+<td>M</td>
+</tr>
+<tr class="row-odd"><td>推定誤差分散共分散行列</td>
+<td>P</td>
+<td>N ✕ N</td>
+</tr>
+<tr class="row-even"><td>システムノイズの分散共分散行列</td>
+<td><span class="math">\(\Gamma\)</span> , Q</td>
+<td>N ✕ N</td>
+</tr>
+<tr class="row-odd"><td>観測ノイズの分散共分散行列</td>
+<td><span class="math">\(\Sigma\)</span> , R</td>
+<td>M ✕ M</td>
+</tr>
+<tr class="row-even"><td>カルマンゲイン</td>
+<td>K</td>
+<td>N ✕ M</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lqg">
+<h2>LQGの仮定<a class="headerlink" href="#lqg" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>カルマンフィルタは以下のLQG条件を有する状態空間モデルです。
+これらの条件により効率的に状態を推定する事ができます。</p>
+<ol class="arabic simple">
+<li>システム方程式及び観測方程式の線形性 (Linear)</li>
+<li>システムの雑音及び観測雑音の白色性 (white)</li>
+<li>雑音分布のガウス正規性 (Gaussian)</li>
+<li>２乗誤差規範</li>
+</ol>
+<p>カルマンフィルタはLQG仮定の元
+カルマンフィルタはLQG仮定の元、事後推定誤差分散を最小化することを目的としている</p>
+</div>
+<div class="section" id="id5">
+<h2>状態の推定<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>観測更新ステップ</p>
 <p><span class="math">\(p(z_{t}|X^{t})=\frac{p(x_{t}|z_{t})p(z_{t}|X^{t-1})}{p(x_{t}|X^{t-1})}\)</span></p>
 <p>時間更新ステップ</p>
 <p><span class="math">\(p(z_{t+1}|X^{t})=\int p(z_{t+1}|z_{t})p(z_{t}|X^{t}) dz_{t}\)</span></p>
 </div>
-<div class="section" id="id5">
-<h2>用語と記号<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id6">
+<h2>用語と記号<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>事前推定誤差: <span class="math">\(\bar{e} = \mu_{k} - \bar{\mu}_{k} = \mu_{k} - E[z|x_{k-1}]\)</span></p>
 <p>事後推定誤差: <span class="math">\(\hat{e} = \mu_{k} - \hat{\mu}_{k} = \mu_{k} - E[z|x_{k}]\)</span></p>
 <p>事前推定誤差分散: <span class="math">\(\hat{P_{k}} = E[\hat{e}_{k} \hat{e}_{k}^{T}]\)</span></p>
 <p>事後推定誤差分散: <span class="math">\(\bar{P_{k}} = E[\bar{e_{k}} \bar{e_{k}^{T}}]\)</span></p>
 </div>
-<div class="section" id="id6">
-<h2>計算<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="id7">
-<h3>予測<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h2>計算<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id8">
+<h3>予測<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first">事前平均値</p>
 <p><span class="math">\(\mu_{n}^{-} = A \mu_{n-1}\)</span></p>
@@ -104,8 +176,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id8">
-<h3>フィルタリング<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id9">
+<h3>フィルタリング<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first">カルマンゲイン</p>
 <p><span class="math">\(K_{n}=P_{n-1}C^{T}(CP_{n-1}C^{T}+\Sigma)^{-1}\)</span></p>
@@ -119,8 +191,8 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id9">
-<h2>メモ<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id10">
+<h2>メモ<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul>
 <li><p class="first">システムが定常であるとき、カルマンゲインは収束する</p>
 <blockquote>
@@ -131,8 +203,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h2>参考<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id11">
+<h2>参考<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <ul class="simple">
 <li>非線形カルマンフィルタ</li>
 <li>PRML 下巻</li>
@@ -150,17 +222,18 @@
   <ul>
 <li><a class="reference internal" href="#">カルマンフィルタとは?</a><ul>
 <li><a class="reference internal" href="#id2">何ができるの?</a></li>
-<li><a class="reference internal" href="#lqg">LQGの仮定</a></li>
 <li><a class="reference internal" href="#id3">線形確率システム</a></li>
-<li><a class="reference internal" href="#id4">状態の推定</a></li>
-<li><a class="reference internal" href="#id5">用語と記号</a></li>
-<li><a class="reference internal" href="#id6">計算</a><ul>
-<li><a class="reference internal" href="#id7">予測</a></li>
-<li><a class="reference internal" href="#id8">フィルタリング</a></li>
+<li><a class="reference internal" href="#id4">パラメータ集</a></li>
+<li><a class="reference internal" href="#lqg">LQGの仮定</a></li>
+<li><a class="reference internal" href="#id5">状態の推定</a></li>
+<li><a class="reference internal" href="#id6">用語と記号</a></li>
+<li><a class="reference internal" href="#id7">計算</a><ul>
+<li><a class="reference internal" href="#id8">予測</a></li>
+<li><a class="reference internal" href="#id9">フィルタリング</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id9">メモ</a></li>
-<li><a class="reference internal" href="#id10">参考</a></li>
+<li><a class="reference internal" href="#id10">メモ</a></li>
+<li><a class="reference internal" href="#id11">参考</a></li>
 </ul>
 </li>
 </ul>

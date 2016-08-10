@@ -93,7 +93,7 @@ class KalmanFilter(object):
         return self.R
 
     def check_parameter_dim(self):
-        #
+        # 
         pass
 
     def update(self, observerd_data):
