@@ -130,10 +130,9 @@ class KalmanFilter(object):
         # prediction step
         if not (u is None):
             m = A @ m + B @ u
-            P = A @ P @ A.T + Q
         else:
             m = A @ m
-            P = A @ P @ A.T + Q
+        P = A @ P @ A.T + Q
         # update step
         S = C @ P @ C.T + R
         K = P @ C.T @ np.linalg.inv(S)
