@@ -1,11 +1,6 @@
 # kalman filter implemented in python
 
-## todo
 
-* filtering/smoothing/prediction
-* パラメータ推定
-    * EMアルゴリズムによるバッチ学習
-    * パラメータも状態とみなして更新するオンライン学習
-    * MCMC
+## about kalman filter 
 
-* 
+ http://57aadeb866867421f02ba6d8.biologist-goat-80763.netlify.com/
