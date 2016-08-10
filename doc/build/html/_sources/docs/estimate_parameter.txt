@@ -6,7 +6,7 @@
 
 完全データX,Zが
 
-:math:`l(\theta) = \ln p(X,Z|\theta) = \ln p(z_{0}|\mu_{0},P_{0})+ \sum_{n=2}^{N} \ln p(z_{n}|z_{n-1},F,Q)+ \sum_{n=1}^{N} \ln p(x_{n}|z_{n},H,R)`
+:math:`l(\theta) = \ln p(X,Z|\theta) = \ln p(z_{0}|\mu_{0},P_{0})+ \sum_{n=2}^{N} \ln p(z_{n}|z_{n-1},A,Q)+ \sum_{n=1}^{N} \ln p(x_{n}|z_{n},C,R)`
 
 :math:`\ln \mathcal{N} (\mathbf{x}|\mathbf{\mu},\mathbf{\Sigma}) = - \frac{D\ln(2 \pi)}{2}  -\frac{1}{2} \ln(|\Sigma|) -\frac{1}{2}(\mathbf{x}- \mathbf{\mu}) \Sigma^{-1}(\mathbf{x}- \mathbf{\mu})`
 
