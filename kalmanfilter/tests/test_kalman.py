@@ -8,7 +8,7 @@ class KalmanFilterTest(unittest.TestCase):
     # テストメソッドを実行するたびに呼ばれる
     def setUp(self):
         F = np.random.normal(size=[3, 3])
-        H = np.random.normal(size=[2, 2])
+        H = np.random.normal(size=[2, 3])
 
         Q = np.eye(3)
         R = np.eye(2)

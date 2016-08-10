@@ -49,8 +49,8 @@ class KalmanFilter(object):
 
         self.K = None  # カルマンゲイン
 
-        self.M = self.F.shape[0]  # 状態量の次元数
-        self.N = self.H.shape[0]  # 観測値の次元数
+        self.N = self.A.shape[0]  # 状態量の次元数
+        self.M = self.C.shape[0]  # 観測値の次元数
 
         # 推定誤差分散共分散行列
         if not initial_covariance is None:
@@ -63,14 +63,15 @@ class KalmanFilter(object):
             self.m = initial_mean
         else:
             self.m = np.random.multivariate_normal(np.zeros(self.M), self.P)
+        self.check_parameter_size()
 
     @property
     def state_dim(self):
-        return self.M
+        return self.N
 
     @property
     def observation_dim(self):
-        return self.N
+        return self.M
 
     @property
     def current_state(self):
@@ -92,9 +93,12 @@ class KalmanFilter(object):
     def observation_noise(self):
         return self.R
 
-    def check_parameter_dim(self):
-        # 
-        pass
+    def check_parameter_size(self):
+        if not (self.N == self.A.shape[0] == self.A.shape[1] == self.C.shape[1] == self.Q.shape[0] == self.Q.shape[1]):
+            raise ValueError("parameter size is not adequate check system dimension")
+
+        if not (self.M == self.C.shape[0] == self.R.shape[0] == self.R.shape[1]):
+            raise ValueError("parameter size is not adequate check observe dimension")
 
     def update(self, observerd_data):
         """ update state.
