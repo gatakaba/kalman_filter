@@ -98,10 +98,13 @@ class KalmanFilter(object):
         return self.R
 
     def check_parameter_size(self):
+
         if not (self.N == self.A.shape[0] == self.A.shape[1] == self.C.shape[1] == self.Q.shape[0] == self.Q.shape[1]):
             raise ValueError("parameter size is not adequate check system dimension")
 
         if not (self.M == self.C.shape[0] == self.R.shape[0] == self.R.shape[1]):
+            print(self.M, self.C.shape, self.R.shape)
+
             raise ValueError("parameter size is not adequate check observe dimension")
 
     def update(self, observerd_data, input_data=None):
@@ -132,6 +135,7 @@ class KalmanFilter(object):
             m = A @ m + B @ u
         else:
             m = A @ m
+
         P = A @ P @ A.T + Q
         # update step
         S = C @ P @ C.T + R

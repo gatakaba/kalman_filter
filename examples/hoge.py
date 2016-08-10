@@ -1,29 +1,50 @@
 # coding:utf-8
-"""
-
-"""
 import numpy as np
 import matplotlib.pyplot as plt
 from kalmanfilter.kalmanfilter import KalmanFilter
 
-dt = 10 ** -2
-K = 1
-C = 1
-M = 1
+np.random.seed(0)
 
-u = -M * 9.8
-F = np.array([[1, dt, 0],
-              [-K / M * dt, -C / M * dt + 1, dt / M * u],
-              [0, 0, 1]])
+dt = 10 ** -3
+M, D, K = 1, 0, 0
 
-H = np.array([[1, 0, 0], [0, 0, 0]])
+A = np.array([[1, dt],
+              [-K / M * dt, -D / M * dt + 1]])
 
-Q = np.eye(3) * 0.01
-R = np.eye(2) * 0.01
-s = np.array([0, 0, 1])
+B = np.array([[0, 0], [0, dt / M]])
 
-kf = KalmanFilter(F, H, Q, R, s, initial_covariance=None)
-t = np.linspace(0, -100)
-for i in range(1000):
-    kf.update(np.array([t[i], 0]))
-    print(kf.current_state[0])
+C = np.array([1, 0])
+C = np.atleast_2d(C)
+
+Q = np.eye(2) * 0.01
+R = np.eye(1)
+
+s = np.array([0, 0])
+
+kf = KalmanFilter(A, C, Q, R, s, initial_covariance=None, drive_matrix=B)
+j = []
+l = []
+k = []
+N = 1000
+x = 0
+t = np.arange(0, N * dt, dt)
+
+for i in range(N):
+    u = np.array([0, -M * 9.8])
+
+    x = -t[i] ** 2 * 9.8 / 2
+
+    kf.update(x + np.random.normal(0, 1), u)
+    j.append(np.copy(x))
+    l.append(np.copy(kf.current_state[0])[0])
+    k.append(np.copy(kf.current_state[1])[0, 0])
+
+true_x = np.array(j)
+x = np.array(l)
+v = np.array(k)
+
+plt.plot(t, true_x, "g-")
+plt.fill_between(t, x - v ** 0.5, x + v ** 0.5, alpha=0.25)
+plt.plot(t, x, "ro-")
+
+plt.show()
