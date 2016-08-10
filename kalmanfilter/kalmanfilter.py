@@ -194,7 +194,7 @@ class KalmanFilter(object):
         else:
             return estimated_mean_list, estimated_covariance_list
 
-    def predict_observation(self, k, spot_estimation=False):
+    def predict_observation(self, k, input_data=None, spot_estimation=False):
         """ estimate observation between k step from current.
 
         p(x_{t+k}|x_{1:k})
@@ -203,6 +203,9 @@ class KalmanFilter(object):
         ----------
         k : int
             Number of prediction step.
+
+        input_data : ndarray ,shape = (input_dim)
+
         spot_estimation : bool
             If True, return only after k step estimate value
 
@@ -212,8 +215,9 @@ class KalmanFilter(object):
             The estimated value.
         """
 
-        A, C, Q, R = self.A, self.C, self.Q, self.R
-        estimated_state_data = self.predict_state(k)
+        u = input_data
+        A, B, C, Q, R = self.A, self.B, self.C, self.Q, self.R
+        estimated_state_data = self.predict_state(k, u)
 
         estimated_mean_list = []
         estimated_covariance_list = []
