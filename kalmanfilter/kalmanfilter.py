@@ -118,6 +118,8 @@ class KalmanFilter(object):
         ----------
         observerd_data : ndarray ,shape = (observation_dim)
 
+        input_data : ndarray ,shape = (input_dim)
+
         Returns
         -------
         self : object
@@ -135,8 +137,8 @@ class KalmanFilter(object):
             m = A @ m + B @ u
         else:
             m = A @ m
-
         P = A @ P @ A.T + Q
+
         # update step
         S = C @ P @ C.T + R
         K = P @ C.T @ np.linalg.inv(S)
@@ -148,7 +150,7 @@ class KalmanFilter(object):
         self.P = P
         return self
 
-    def predict_state(self, k, spot_estimation=False):
+    def predict_state(self, k, input_data=None, spot_estimation=False):
         """ estimate state between k step from current.
 
         p(z_{t+k}|x_{1:k})
@@ -157,6 +159,9 @@ class KalmanFilter(object):
         ----------
         k : int
             Number of prediction step.
+
+        input_data : ndarray ,shape = (input_dim)
+
         spot_estimation : bool
             If True, return only after k step estimate value
 
@@ -168,12 +173,17 @@ class KalmanFilter(object):
 
         m = np.copy(self.m)
         P = np.copy(self.P)
-        A, C, Q, R = self.A, self.C, self.Q, self.R
+
+        u = input_data
+        A, B, C, Q, R = self.A, self.B, self.C, self.Q, self.R
 
         estimated_mean_list = []
         estimated_covariance_list = []
         for i in range(k):
-            m = A @ m
+            if not (u is None):
+                m = A @ m + B @ u
+            else:
+                m = A @ m
             P = A @ P @ A.T + Q
 
             estimated_mean_list.append(np.copy(m))
