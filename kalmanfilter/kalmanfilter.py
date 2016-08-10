@@ -15,7 +15,7 @@ import numpy as np
 
 class KalmanFilter(object):
     """カルマンフィルタの実装
-        * p(z_{n+1}|z_{n}) = N(z_{n+1}|F z_{n},\gamma)
+        * p(z_{n+1}|z_{n}) = N(z_{n+1}|A z_{n},\gamma)
         * p(x_{n}|z_{n}) = N(x_{n}|C z_{n},\sigma)
 
     Parameters
@@ -41,8 +41,8 @@ class KalmanFilter(object):
 
     def __init__(self, transition_matrix, observation_matrix, process_noise, observation_noise, initial_mean=None,
                  initial_covariance=None):
-        self.F = transition_matrix  # 遷移行列
-        self.H = observation_matrix  # 観測行列
+        self.A = transition_matrix  # 遷移行列
+        self.C = observation_matrix  # 観測行列
 
         self.Q = process_noise  # プロセスノイズの分散共分散行列
         self.R = observation_noise  # 観測ノイズの分散共分散行列
@@ -78,11 +78,11 @@ class KalmanFilter(object):
 
     @property
     def transition_matrix(self):
-        return self.F
+        return self.A
 
     @property
     def observation_matrix(self):
-        return self.H
+        return self.C
 
     @property
     def process_noise(self):
@@ -91,6 +91,10 @@ class KalmanFilter(object):
     @property
     def observation_noise(self):
         return self.R
+
+    def check_parameter_dim(self):
+        #
+        pass
 
     def update(self, observerd_data):
         """ update state.
@@ -110,18 +114,18 @@ class KalmanFilter(object):
         """
 
         x = observerd_data
-        F, H, Q, R = self.F, self.H, self.Q, self.R
+        A, C, Q, R = self.A, self.C, self.Q, self.R
         m = np.copy(self.m)
         P = np.copy(self.P)
 
         # prediction step
-        m = F @ m
-        P = F @ P @ F.T + Q
+        m = A @ m
+        P = A @ P @ A.T + Q
 
         # update step
-        S = H @ P @ H.T + R
-        K = P @ H.T @ np.linalg.inv(S)
-        m = m + K @ (x - H @ m)
+        S = C @ P @ C.T + R
+        K = P @ C.T @ np.linalg.inv(S)
+        m = m + K @ (x - C @ m)
         P = P - K @ S @ K.T
 
         # update parameter
@@ -149,13 +153,13 @@ class KalmanFilter(object):
 
         m = np.copy(self.m)
         P = np.copy(self.P)
-        F, H, Q, R = self.F, self.H, self.Q, self.R
+        A, C, Q, R = self.A, self.C, self.Q, self.R
 
         estimated_mean_list = []
         estimated_covariance_list = []
         for i in range(k):
-            m = F @ m
-            P = F @ P @ F.T + Q
+            m = A @ m
+            P = A @ P @ A.T + Q
 
             estimated_mean_list.append(np.copy(m))
             estimated_covariance_list.append(np.copy(P))
@@ -183,7 +187,7 @@ class KalmanFilter(object):
             The estimated value.
         """
 
-        F, H, Q, R = self.F, self.H, self.Q, self.R
+        A, C, Q, R = self.A, self.C, self.Q, self.R
         estimated_state_data = self.predict_state(k)
 
         estimated_mean_list = []
@@ -193,8 +197,8 @@ class KalmanFilter(object):
             m = estimated_state_data[0][i]
             P = estimated_state_data[1][i]
 
-            predicted_x = H @ m
-            predicted_R = H @ P @ H.T + R
+            predicted_x = C @ m
+            predicted_R = C @ P @ C.T + R
 
             estimated_mean_list.append(predicted_x)
             estimated_covariance_list.append(predicted_R)
