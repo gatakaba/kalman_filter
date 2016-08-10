@@ -37,11 +37,15 @@ class KalmanFilter(object):
     initial_covariance : ndarray, shape = (state_dim, state_dim), optional
         covariance of the inital state.
         if you don't set, initial covariance will be I * 10 ** 4
+
+    drive_matrix : ndarray, shape = (state_dim, input_dim), optional
+
     """
 
     def __init__(self, transition_matrix, observation_matrix, process_noise, observation_noise, initial_mean=None,
-                 initial_covariance=None):
+                 initial_covariance=None, drive_matrix=None):
         self.A = transition_matrix  # 遷移行列
+        self.B = drive_matrix  # 駆動行列
         self.C = observation_matrix  # 観測行列
 
         self.Q = process_noise  # プロセスノイズの分散共分散行列
@@ -56,13 +60,13 @@ class KalmanFilter(object):
         if not initial_covariance is None:
             self.P = initial_covariance
         else:
-            self.P = np.eye(self.M) * 10 ** 4
+            self.P = np.eye(self.N) * 10 ** 4
 
         # 状態量の条件付き期待値
         if not initial_mean is None:
             self.m = initial_mean
         else:
-            self.m = np.random.multivariate_normal(np.zeros(self.M), self.P)
+            self.m = np.random.multivariate_normal(np.zeros(self.N), self.P)
         self.check_parameter_size()
 
     @property
@@ -100,7 +104,7 @@ class KalmanFilter(object):
         if not (self.M == self.C.shape[0] == self.R.shape[0] == self.R.shape[1]):
             raise ValueError("parameter size is not adequate check observe dimension")
 
-    def update(self, observerd_data):
+    def update(self, observerd_data, input_data=None):
         """ update state.
 
         p(z_{k}|x_{1:k})
@@ -118,14 +122,18 @@ class KalmanFilter(object):
         """
 
         x = observerd_data
-        A, C, Q, R = self.A, self.C, self.Q, self.R
+        u = input_data
+        A, B, C, Q, R = self.A, self.B, self.C, self.Q, self.R
         m = np.copy(self.m)
         P = np.copy(self.P)
 
         # prediction step
-        m = A @ m
-        P = A @ P @ A.T + Q
-
+        if not (u is None):
+            m = A @ m + B @ u
+            P = A @ P @ A.T + Q
+        else:
+            m = A @ m
+            P = A @ P @ A.T + Q
         # update step
         S = C @ P @ C.T + R
         K = P @ C.T @ np.linalg.inv(S)
