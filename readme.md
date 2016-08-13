@@ -1,8 +1,9 @@
-# kalman filter implemented in python
+# bayesian filter implemented in python
 
 # features
-- filtering
-- prediction
+- kalman filter
+    - filtering
+    - prediction
 
 
 ## about kalman filter : 

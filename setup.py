@@ -6,10 +6,10 @@ requirement_list = [r.strip() for r in open('requirements.txt', 'r').readlines()
 
 def main():
     setup(
-        name='kalmanfilter',
+        name='bayesianfilter',
         install_requires=requirement_list,
         version='0.1a',
-        description='kalmanfilter implemented in python',
+        description='dynamic system implemented in python',
         author='Yu Kabasawa',
         packages=find_packages(),
         license='MIT',
