@@ -1,4 +1,5 @@
-# bayesian filter implemented in python
+This is a python implementation for bayesian filter.
+Currently Kalmanfilter is supported.
 
 # features
 - kalman filter
