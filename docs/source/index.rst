@@ -38,6 +38,7 @@ Contents:
     docs/about_kalman
     docs/estimate_parameter
 
+    docs/UKF.rst
 
 Indices and tables
 ==================
