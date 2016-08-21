@@ -74,6 +74,7 @@ x, y = np.mgrid[np.min(Y[:, 0]):np.max(Y[:, 0]):.01, np.min(Y[:, 1]):np.max(Y[:,
 pos = np.empty(x.shape + (2,))
 pos[:, :, 0] = x
 pos[:, :, 1] = y
+
 rv = multivariate_normal(transformed_mu, transformed_cov)
 plt.contour(x, y, rv.pdf(pos))
 

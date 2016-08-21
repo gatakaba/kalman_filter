@@ -29,7 +29,7 @@ class UnscentedKalmanFilter(object):
         self.Q = process_noise
         self.R = observation_noise
 
-        self.state_covariance = np.eye(self.N) * 10 ** 4
+        self.state_covariance = np.eye(self.N)
         self.state_mean = np.random.multivariate_normal(np.zeros(self.N), self.state_covariance)
 
         alpha, beta, kappa = 1, 0, 1
@@ -46,7 +46,6 @@ class UnscentedKalmanFilter(object):
     @property
     def observation_dim(self):
         return self.M
-
 
     def check_parameter_size(self):
         pass
@@ -93,35 +92,38 @@ class UnscentedKalmanFilter(object):
         sigma_points = np.array(sigma_points)
         return sigma_points
 
-    def unscented_transform(self, mu, P, propagate_function):
+    def unscented_transform(self, mean, covariance, propagate_function):
         """Computes unscented transform of a set of sigma points and weights
 
         returns the mean and covariance in a tuple.
 
         Parameters
         ----------
-        mu : ndarray, shape = (state_dim)
+        mean : ndarray, shape = (state_dim)
 
-        P : ndarray, shape = (state_dim, state_dim)
+        covariance : ndarray, shape = (state_dim, state_dim)
 
         propagate_function : function
             Function that computes the sigmapoints
 
         Returns
         -------
-        transformed_mean : ndarray, shape = (state_dim)
+        transformed_mean : ndarray, shape = (dimension of propagate function)
             Mean of the sigma points after passing through the transform.
 
-        transformed_covariance : ndarray, shape =(state_dim, state_dim)
+        transformed_covariance : ndarray, shape =(dimension of propagate function,dimension of propagate function)
             covariance of the sigma points after passing throgh the transform.
 
         """
-        sigma_points = self.get_sigma_points(mu, P)
+        sigma_points = self.get_sigma_points(mean, covariance)
         # propagete
-        propagated_sigma_points = propagate_function(sigma_points)
+        propagated_sigma_points = []
+        for i in range(self.N * 2 + 1):
+            propagated_sigma_points.append(propagate_function(sigma_points[i]))
+        propagated_sigma_points = np.array(propagated_sigma_points)
 
-        transformed_mean = np.zeros(self.N)
-        transformed_covariance = np.zeros([self.N, self.N])
+        transformed_mean = np.zeros(propagated_sigma_points.shape[1])
+        transformed_covariance = np.zeros([propagated_sigma_points.shape[1], propagated_sigma_points.shape[1]])
 
         for i in range(0, 2 * self.N + 1):
             transformed_mean += self.wm[i] * propagated_sigma_points[i, :]
@@ -147,9 +149,12 @@ class UnscentedKalmanFilter(object):
         # compute the cross covariance
 
         state_sigma_points = self.get_sigma_points(predicted_state_mean, predicted_state_covariance)
-        observation_sigma_points = self.h(state_sigma_points)
+        observation_sigma_points = []
+        for state_sigma_point in state_sigma_points:
+            observation_sigma_points.append(self.h(state_sigma_point))
 
         cross_covariance = np.zeros([self.N, self.M])
+
         for i in range(0, 2 * self.N + 1):
             cross_covariance += self.wc[i] * np.outer(state_sigma_points[i] - predicted_state_mean,
                                                       observation_sigma_points[i] - observation_mean)
