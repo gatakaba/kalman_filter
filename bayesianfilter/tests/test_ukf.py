@@ -14,27 +14,22 @@ class UnscentedKalmanFilterTest(unittest.TestCase):
             return x
 
         state_dim = 3
-        observation_dim = 2
+        observation_dim = 3
 
         Q = np.eye(state_dim)
         R = np.eye(observation_dim)
         f = transition_function
         h = observation_function
 
-        self.ukf = UnscentedKalmanFilter(state_dim, observation_dim)
+        self.ukf = UnscentedKalmanFilter(state_dim, observation_dim, f, h, Q, R)
 
     def test_dim(self):
-        self.assertEqual(self.kf.state_dim, 3)
-        self.assertEqual(self.kf.observation_dim, 2)
+        self.assertEqual(self.ukf.state_dim, 3)
+        self.assertEqual(self.ukf.observation_dim, 3)
 
     def test_fitering(self):
-        x = np.array([2, 2])
-        self.kf.update(x)
-
-    def test_predict_observation(self):
-        x = np.array([2, 2])
-        self.kf.update(x)
-        self.assertEqual(len(self.kf.predict_observation(3)[0]), 3)
+        x = np.array([2, 2, 2])
+        self.ukf.update(x)
 
 
 if __name__ == '__main__':
