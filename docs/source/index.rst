@@ -6,7 +6,8 @@ Contents:
 .. toctree::
     :maxdepth: 1
 
-    docs/about_kalman
+    docs/kalman_filter
+    docs/kalman_smoother
     docs/estimate_parameter
     
 
