@@ -123,13 +123,31 @@ class KalmanSmoother(object):
         """
 
         # 状態量推定
-        state_mean_list = []
-        state_covariance_list = []
+        feed_foward_state_mean_list = []
+        feed_foward_state_covariance_list = []
 
         for observed_data in observerd_data_list:
             self.update(observed_data)
-            state_mean_list.append(self.m)
-            state_covariance_list.append(self.P)
+            feed_foward_state_mean_list.append(self.m)
+            feed_foward_state_covariance_list.append(self.P)
+
+        smoothed_state_mean_list = [feed_foward_state_mean_list[-1]]
+        smoothed_state_covariance_list = [feed_foward_state_covariance_list[-1]]
+
+        for i in range(len(observerd_data_list) - 1)[::-1]:
+            mu = feed_foward_state_mean_list[i]
+            P = feed_foward_state_covariance_list[i]
+            C = P @ self.A.T @ np.linalg.inv((self.A.T @ P @ self.A.T + self.Q))
+
+            smoothed_state_mean_list.append(mu + C @ (smoothed_state_mean_list[-1] - self.A @ mu))
+
+            smoothed_state_covariance_list.append(
+                P + C @ (smoothed_state_covariance_list[-1] - self.A @ P @ self.A.T - self.Q) @ C.T)
+
+        smoothed_state_mean_list = smoothed_state_mean_list[::-1]
+        smoothed_state_covariance_list = smoothed_state_covariance_list[::-1]
+
+        return np.array(smoothed_state_mean_list), np.array(smoothed_state_covariance_list)
 
     def update(self, observerd_data, input_data=None):
         """ update state.
@@ -176,15 +194,26 @@ class KalmanSmoother(object):
 
 
 if __name__ == "__main__":
-    A = np.array([[1, 0.1],
+    A = np.array([[1, 0.01],
                   [0, 1]])
 
     C = np.atleast_2d([1, 0])
 
-    Q = np.array([[1, 0], [0, 1]])
+    Q = np.array([[0.01, 0], [0, 0.01]])
+
     R = np.eye(1)
 
     ks = KalmanSmoother(A, C, Q, R)
-    x = np.random.normal(0, 100, size=100)
-    x = np.cumsum(x)
-    ks.smoothing(x)
+
+    t = np.linspace(0, 1, 1000)
+    x = np.sin(2 * np.pi * t) + np.random.normal(0, 0.1, size=len(t))
+    mu, p = ks.smoothing(x)
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(t, x, label="observed")
+    plt.plot(t, mu[:, 0], label="smoothed")
+    plt.fill_between(t, mu[:, 0] - p[:, 0, 0] ** 0.5, mu[:, 0] + p[:, 0, 0] ** 0.5, alpha=0.25, label="1σ")
+
+    plt.legend()
+    plt.show()

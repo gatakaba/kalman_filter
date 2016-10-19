@@ -14,10 +14,10 @@
 2. 1.で求めた推定値を用いて、以下の式に従い、スムージングされた値を算出する
 
 
-:math:`\hat{x}_{k|n} = \hat{x}_{k|k} +C_{k}(\hat{x}_{k+1|n} - \hat{x}_{k+1|k})`
+:math:`\hat{x}_{k|n} = \hat{x}_{k|k} +C_{k}(\hat{x}_{k+1|n} - \hat{x}_{k+1|k}) = \hat{x}_{k|k} +C_{k}(\hat{x}_{k+1|n} - F \hat{x}_{k|k})`
 
-:math:`P_{k|n} = P_{k|k} +C_{k}(P_{k+1|n} - P_{k+1|k})C_{k}^{T}`
+:math:`P_{k|n} = P_{k|k} +C_{k}(P_{k+1|n} - P_{k+1|k})C_{k}^{T} = P_{k|k} +C_{k}(P_{k+1|n} - F P_{k|k} F^{T} - Q)C_{k}^{T}`
 
-:math:`C_{k} = P_{k|k} F^{T} P_{k+1|k}^{-1}`
+:math:`C_{k} = P_{k|k} F^{T} P_{k+1|k}^{-1} = P_{k|k} F^{T} (F P_{k|k} F^{T} + Q)^{-1}`
 
 
